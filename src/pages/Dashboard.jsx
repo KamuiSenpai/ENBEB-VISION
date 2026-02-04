@@ -322,7 +322,8 @@ export const Dashboard = () => {
                                         axisLine={false}
                                         tickLine={false}
                                         tick={{ fontSize: 9, fill: '#475569', fontWeight: 500 }}
-                                        width={160}
+                                        tickFormatter={(value) => value.length > 25 ? `${value.substring(0, 25)}...` : value}
+                                        width={180}
                                     />
                                     <Tooltip
                                         contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
