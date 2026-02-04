@@ -306,22 +306,23 @@ export const Dashboard = () => {
                     <div className="h-[350px]">
                         {topProductsData.length > 0 ? (
                             <ResponsiveContainer width="100%" height="100%">
-                                <BarChart data={topProductsData} layout="vertical" margin={{ top: 5, right: 30, left: 10, bottom: 5 }}>
+                                <BarChart data={topProductsData} layout="vertical" margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
                                     <CartesianGrid strokeDasharray="3 3" horizontal={false} vertical={true} stroke="#f1f5f9" />
                                     <XAxis
                                         type="number"
                                         axisLine={false}
                                         tickLine={false}
+                                        domain={[0, 'dataMax']}
                                         tick={{ fontSize: 10, fill: '#94a3b8' }}
-                                        tickFormatter={(v) => `S/ ${(v / 1000).toFixed(0)}k`}
+                                        tickFormatter={(v) => `S/ ${(v / 1000).toFixed(1)}k`}
                                     />
                                     <YAxis
                                         type="category"
                                         dataKey="name"
                                         axisLine={false}
                                         tickLine={false}
-                                        tick={{ fontSize: 11, fill: '#475569' }}
-                                        width={220}
+                                        tick={{ fontSize: 9, fill: '#475569', fontWeight: 500 }}
+                                        width={160}
                                     />
                                     <Tooltip
                                         contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
@@ -329,7 +330,7 @@ export const Dashboard = () => {
                                         labelFormatter={(label, payload) => payload?.[0]?.payload?.fullName || label}
                                         cursor={{ fill: '#fff7ed' }}
                                     />
-                                    <Bar dataKey="total" radius={[0, 4, 4, 0]} barSize={20}>
+                                    <Bar dataKey="total" radius={[0, 4, 4, 0]} barSize={32}>
                                         {topProductsData.map((entry, index) => (
                                             <Cell key={`cell-${index}`} fill={index === 0 ? '#ea580c' : index === 1 ? '#f97316' : index === 2 ? '#fb923c' : '#fdba74'} />
                                         ))}
