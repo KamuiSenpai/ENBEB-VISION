@@ -7,6 +7,7 @@ import { ReceivablesReport } from '../components/reports/ReceivablesReport';
 import { PayablesReport } from '../components/reports/PayablesReport';
 import { MarginsReport } from '../components/reports/MarginsReport';
 import { CashFlowReport } from '../components/reports/CashFlowReport';
+import { ProductHistoryReport } from '../components/reports/ProductHistoryReport';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, Area, CartesianGrid } from 'recharts';
 
 export const Reports = () => {
@@ -73,7 +74,9 @@ export const Reports = () => {
         { id: 'receivables', label: 'Ctas. por Cobrar', icon: <Icons.UserCheck size={18} /> },
         { id: 'payables', label: 'Ctas. por Pagar', icon: <Icons.CreditCard size={18} /> },
         { id: 'margins', label: 'Rentabilidad', icon: <Icons.Percent size={18} /> },
+
         { id: 'cashflow', label: 'Flujo de Caja', icon: <Icons.Activity size={18} /> },
+        { id: 'history', label: 'Historial', icon: <Icons.History size={18} /> },
     ];
 
     return (
@@ -274,6 +277,7 @@ export const Reports = () => {
                 {activeTab === 'payables' && <div className="animate-fade-in"><PayablesReport /></div>}
                 {activeTab === 'margins' && <div className="animate-fade-in"><MarginsReport /></div>}
                 {activeTab === 'cashflow' && <div className="animate-fade-in"><CashFlowReport /></div>}
+                {activeTab === 'history' && <div className="animate-fade-in"><ProductHistoryReport /></div>}
             </div>
         </div>
     );
