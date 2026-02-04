@@ -3,7 +3,7 @@
  * Uses Google's Gemini API to extract invoice data from images
  */
 
-const GEMINI_API_KEY = 'AIzaSyDGEd3O6sGL-7EjNvR65_9GrE0mrIRW6E8';
+const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
 
 /**

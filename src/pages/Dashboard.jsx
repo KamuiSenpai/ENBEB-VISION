@@ -274,7 +274,7 @@ export const Dashboard = () => {
                                 <BarChart data={trendData} layout="vertical" margin={{ top: 5, right: 30, left: 10, bottom: 5 }}>
                                     <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="#f1f5f9" />
                                     <XAxis type="number" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#94a3b8' }} tickFormatter={(v) => `S/ ${(v / 1000).toFixed(0)}k`} />
-                                    <YAxis type="category" dataKey="cliente" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#475569' }} width={100} />
+                                    <YAxis type="category" dataKey="cliente" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#475569', fontWeight: 500 }} width={180} />
                                     <Tooltip
                                         formatter={(value, name, props) => [formatCurrency(value), 'Ventas']}
                                         labelFormatter={(label, payload) => payload?.[0]?.payload?.fullName || label}

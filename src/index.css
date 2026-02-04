@@ -150,22 +150,6 @@
         animation: skeleton 1.5s ease-in-out infinite;
     }
 
-    .skeleton-text {
-        @apply skeleton h-4 rounded;
-    }
-
-    .skeleton-title {
-        @apply skeleton h-6 rounded w-3/4;
-    }
-
-    .skeleton-avatar {
-        @apply skeleton rounded-full;
-    }
-
-    .skeleton-card {
-        @apply skeleton rounded-xl;
-    }
-
     /* Loader Spinner */
     .loader {
         border: 3px solid rgba(99, 102, 241, 0.2);

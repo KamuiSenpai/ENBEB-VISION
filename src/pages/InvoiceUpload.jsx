@@ -48,9 +48,15 @@ export const InvoiceUpload = () => {
     }, []);
 
     const handleFileSelect = (e) => {
-        const selectedFiles = Array.from(e.target.files).filter(
-            file => file.type.startsWith('image/')
-        );
+        const MAX_SIZE_MB = 5 * 1024 * 1024; // 5MB
+        const selectedFiles = Array.from(e.target.files).filter(file => {
+            if (!file.type.startsWith('image/')) return false;
+            if (file.size > MAX_SIZE_MB) {
+                showNotification(`El archivo ${file.name} excede 5MB`, 'warning');
+                return false;
+            }
+            return true;
+        });
         setFiles(prev => [...prev, ...selectedFiles]);
     };
 
@@ -313,8 +319,8 @@ export const InvoiceUpload = () => {
                         <React.Fragment key={s.num}>
                             <div className={`flex items-center gap-2 ${step >= s.num ? 'text-indigo-600' : 'text-gray-400'}`}>
                                 <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg transition-all ${step > s.num ? 'bg-indigo-600 text-white' :
-                                        step === s.num ? 'bg-indigo-100 text-indigo-600 ring-4 ring-indigo-50' :
-                                            'bg-gray-100 text-gray-400'
+                                    step === s.num ? 'bg-indigo-100 text-indigo-600 ring-4 ring-indigo-50' :
+                                        'bg-gray-100 text-gray-400'
                                     }`}>
                                     {step > s.num ? <Icons.Check size={20} /> : s.num}
                                 </div>

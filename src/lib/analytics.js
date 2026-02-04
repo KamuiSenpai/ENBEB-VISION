@@ -581,7 +581,7 @@ export const generatePeriodTrendData = (sales = [], purchases = [], expenses = [
         const clientName = sale.clientName || 'Sin Cliente';
         if (!clientSales[clientName]) {
             clientSales[clientName] = {
-                cliente: clientName.length > 12 ? clientName.substring(0, 12) + '...' : clientName,
+                cliente: clientName,
                 fullName: clientName,
                 ventas: 0,
                 transacciones: 0

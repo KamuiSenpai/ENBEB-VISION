@@ -3,12 +3,12 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyA_S4K3VpAVHU4KW1T1vIsA7tu9icrGaks",
-    authDomain: "gestion-negocio-pro.firebaseapp.com",
-    projectId: "gestion-negocio-pro",
-    storageBucket: "gestion-negocio-pro.firebasestorage.app",
-    messagingSenderId: "827486290467",
-    appId: "1:827486290467:web:3df14c777fc93ab592a796"
+    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+    appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
 const app = initializeApp(firebaseConfig);
