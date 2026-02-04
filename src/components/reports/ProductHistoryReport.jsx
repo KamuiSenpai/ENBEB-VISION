@@ -14,6 +14,22 @@ export const ProductHistoryReport = () => {
         'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'
     ];
 
+    const [sortConfig, setSortConfig] = useState({ key: 'totalQty', direction: 'desc' });
+
+    const handleSort = (key) => {
+        setSortConfig(current => ({
+            key,
+            direction: current.key === key && current.direction === 'desc' ? 'asc' : 'desc'
+        }));
+    };
+
+    const getSortIcon = (key) => {
+        if (sortConfig.key !== key) return <Icons.ChevronsUpDown size={14} className="text-gray-300 ml-1" />;
+        return sortConfig.direction === 'asc'
+            ? <Icons.ArrowUp size={14} className="text-indigo-600 ml-1" />
+            : <Icons.ArrowDown size={14} className="text-indigo-600 ml-1" />;
+    };
+
     // Generate available years based on sales history
     const years = useMemo(() => {
         const uniqueYears = new Set(sales.map(s => new Date(s.date).getFullYear()));
@@ -23,6 +39,7 @@ export const ProductHistoryReport = () => {
 
     // Data Processing: Aggregate quantity per product per month
     const reportData = useMemo(() => {
+        // ... (data aggregation logic stays the same) ...
         // Initialize map with all products
         const productMap = {};
 
@@ -51,8 +68,6 @@ export const ProductHistoryReport = () => {
                     const prodId = item.productId;
                     // If product exists in catalog (or we create a temp entry for deleted products)
                     if (!productMap[prodId]) {
-                        // Handle legacy/deleted products if necessary, or skip
-                        // For now we skip if not in current product list, or create minimal entry
                         productMap[prodId] = {
                             id: prodId,
                             name: item.productName || 'Producto Eliminado',
@@ -71,15 +86,42 @@ export const ProductHistoryReport = () => {
             }
         });
 
-        // Convert to array and filter
+        // Convert to array, filter, AND SORT
         return Object.values(productMap)
             .filter(p =>
                 p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 p.category.toLowerCase().includes(searchTerm.toLowerCase())
             )
-            .sort((a, b) => b.totalQty - a.totalQty); // Sort by highest volume
+            .sort((a, b) => {
+                let valA, valB;
 
-    }, [products, sales, selectedYear, searchTerm]);
+                // Sort by Product Name
+                if (sortConfig.key === 'name') {
+                    valA = a.name.toLowerCase();
+                    valB = b.name.toLowerCase();
+                    if (valA < valB) return sortConfig.direction === 'asc' ? -1 : 1;
+                    if (valA > valB) return sortConfig.direction === 'asc' ? 1 : -1;
+                    return 0;
+                }
+
+                // Sort by Total
+                if (sortConfig.key === 'totalQty') {
+                    valA = a.totalQty;
+                    valB = b.totalQty;
+                }
+                // Sort by Month Index (0-11)
+                else if (typeof sortConfig.key === 'number') {
+                    valA = a.monthlyQty[sortConfig.key];
+                    valB = b.monthlyQty[sortConfig.key];
+                }
+
+                return sortConfig.direction === 'asc' ? valA - valB : valB - valA;
+            });
+
+    }, [products, sales, selectedYear, searchTerm, sortConfig]);
+
+    // ... (rest of component) ...
+
 
     // Calculate totals per month (footer)
     const monthlyTotals = useMemo(() => {
@@ -136,29 +178,51 @@ export const ProductHistoryReport = () => {
                     <table className="w-full text-sm">
                         <thead className="bg-gray-50 text-gray-600 font-bold uppercase text-xs sticky top-0 z-10">
                             <tr>
-                                <th className="p-4 text-left min-w-[200px] border-b border-gray-200 bg-gray-50 sticky left-0 z-20 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">Producto</th>
+                                <th
+                                    className="p-1 pl-2 text-left min-w-[300px] border-b border-gray-200 bg-gray-50 sticky left-0 z-20 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)] cursor-pointer hover:bg-gray-100 transition-colors group"
+                                    onClick={() => handleSort('name')}
+                                >
+                                    <div className="flex items-center justify-between">
+                                        PRODUCTO {getSortIcon('name')}
+                                    </div>
+                                </th>
                                 {months.map((m, i) => (
-                                    <th key={i} className="p-3 text-center min-w-[60px] border-b border-gray-200">{m}</th>
+                                    <th
+                                        key={i}
+                                        className="p-2 text-center min-w-[50px] border-b border-gray-200 cursor-pointer hover:bg-gray-100 transition-colors"
+                                        onClick={() => handleSort(i)}
+                                    >
+                                        <div className="flex items-center justify-center gap-1 text-xs">
+                                            {m} {sortConfig.key === i && getSortIcon(i)}
+                                        </div>
+                                    </th>
                                 ))}
-                                <th className="p-4 text-center min-w-[80px] bg-indigo-50 text-indigo-700 border-b border-indigo-100 font-extrabold">Total</th>
+                                <th
+                                    className="p-2 text-center min-w-[70px] bg-indigo-50 text-indigo-700 border-b border-indigo-100 font-extrabold cursor-pointer hover:bg-indigo-100 transition-colors"
+                                    onClick={() => handleSort('totalQty')}
+                                >
+                                    <div className="flex items-center justify-center gap-1 text-xs">
+                                        TOTAL {getSortIcon('totalQty')}
+                                    </div>
+                                </th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-100">
                             {reportData.length > 0 ? (
                                 reportData.map((prod, idx) => (
                                     <tr key={prod.id} className="hover:bg-blue-50/30 transition-colors group">
-                                        <td className="p-4 bg-white group-hover:bg-blue-50/30 sticky left-0 z-10 border-r border-gray-100 font-medium text-gray-800">
-                                            <div className="truncate max-w-[200px]" title={prod.name}>
+                                        <td className="p-1 pl-2 bg-white group-hover:bg-blue-50/30 sticky left-0 z-10 border-r border-gray-100 font-medium text-gray-800">
+                                            <div className="min-w-[300px] text-xs font-bold leading-tight" title={prod.name}>
                                                 {prod.name}
                                             </div>
-                                            <div className="text-xs text-gray-400 font-normal">{prod.category}</div>
+                                            <div className="text-[10px] text-gray-400 font-normal min-w-[300px]">{prod.category}</div>
                                         </td>
                                         {prod.monthlyQty.map((qty, i) => (
-                                            <td key={i} className={`p-3 text-center ${qty > 0 ? 'text-gray-800 font-medium' : 'text-gray-300'}`}>
+                                            <td key={i} className={`p-1 text-center text-xs ${qty > 0 ? 'text-gray-800 font-bold' : 'text-gray-300'}`}>
                                                 {qty > 0 ? qty : '-'}
                                             </td>
                                         ))}
-                                        <td className="p-4 text-center font-bold text-indigo-600 bg-indigo-50/30">
+                                        <td className="p-1 text-center text-xs font-bold text-indigo-600 bg-indigo-50/30">
                                             {prod.totalQty}
                                         </td>
                                     </tr>

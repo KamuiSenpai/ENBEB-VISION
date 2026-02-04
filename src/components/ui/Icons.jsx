@@ -103,6 +103,7 @@ export const Icons = {
     ChevronLeft: getIcon(['ChevronLeft']),
     ChevronRight: getIcon(['ChevronRight']),
     ArrowRight: getIcon(['ArrowRight']),
+    ChevronsUpDown: getIcon(['ChevronsUpDown', 'ArrowUpDown', 'Code']),
 
     // Fallback for missing
     Help: Lucide.HelpCircle || Lucide.CircleHelp
